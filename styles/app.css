@@ -173,3 +173,12 @@ main {
 #output .sep { color: var(--muted); text-align: center; padding: 4px 0; user-select: none; }
 .placeholder { color: var(--muted); font-family: inherit; font-size: 13px; }
 mark { padding: 0 1px; border-radius: 2px; color: #000; }
+
+#output .lc { border-left: 3px solid transparent; padding-left: 6px; }
+#output .lc-V { border-left-color: #b0b0b0; color: #666; }
+#output .lc-D { border-left-color: #5a9fd4; }
+#output .lc-I { border-left-color: #4caf50; }
+#output .lc-W { border-left-color: #f0a020; background: rgba(240, 160, 32, 0.06); }
+#output .lc-E { border-left-color: #e04040; background: rgba(224, 64, 64, 0.07); }
+#output .lc-F { border-left-color: #b00020; background: rgba(176, 0, 32, 0.10); font-weight: 600; }
+#output .lc-A { border-left-color: #8a4dff; background: rgba(138, 77, 255, 0.07); }

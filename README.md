@@ -1,6 +1,6 @@
 # Log Highlighter
 
-A static, no-build browser tool for highlighting and filtering raw logs. Paste log text, define keyword groups (each gets a distinct pastel color), and the output panel highlights matches. Embedded JSON and Apple `NSDictionary` payloads inside log lines are detected and pretty-printed inline.
+A static, no-build browser tool for highlighting and filtering raw logs. Paste log text, define keyword groups (each gets a distinct pastel color), and the output panel highlights matches. Embedded JSON and Apple `NSDictionary` payloads inside log lines are detected and pretty-printed inline. Android `logcat` lines (threadtime, time, and brief formats) are detected and colored by severity (V/D/I/W/E/F/A), so iOS and Android logs both render usefully.
 
 ## Structure
 
@@ -15,6 +15,7 @@ A static, no-build browser tool for highlighting and filtering raw logs. Paste l
 │   ├── groups.js       # group/keyword CRUD mutators
 │   ├── groupsView.js   # renders #groups panel
 │   ├── payload.js      # JSON + NSDictionary detection and pretty-print
+│   ├── logcat.js       # Android logcat line detection (level + tag)
 │   ├── highlight.js    # HTML-escaping + overlap-free multi-group highlighter
 │   └── output.js       # renders #output panel (filter/full modes)
 └── .nojekyll           # disables Jekyll processing on GitHub Pages
