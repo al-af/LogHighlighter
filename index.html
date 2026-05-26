@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Log Highlighter</title>
+<link rel="stylesheet" href="styles/app.css">
+</head>
+<body>
+<header>
+  <h1>Log Highlighter</h1>
+  <div class="mode-toggle" id="mode">
+    <button data-mode="filter" class="active">Filter</button>
+    <button data-mode="full">Full</button>
+  </div>
+</header>
+<main>
+  <div class="left">
+    <section class="panel">
+      <h2>Keyword Groups</h2>
+      <div class="panel-body">
+        <div id="groups"></div>
+        <div class="add-group">
+          <input id="newGroup" placeholder="comma,separated,keywords" autocomplete="off">
+          <button id="addGroup">Add</button>
+        </div>
+      </div>
+    </section>
+    <section class="panel">
+      <h2>Input</h2>
+      <textarea id="input" placeholder="paste raw logs here…  (best with logs under 500KB)" spellcheck="false"></textarea>
+    </section>
+  </div>
+  <section class="panel">
+    <h2>Output</h2>
+    <div class="panel-body" id="output">
+      <div class="placeholder">Add a keyword group and paste logs to begin.</div>
+    </div>
+  </section>
+</main>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
