@@ -182,3 +182,54 @@ mark { padding: 0 1px; border-radius: 2px; color: #000; }
 #output .lc-E { border-left-color: #e04040; background: rgba(224, 64, 64, 0.07); }
 #output .lc-F { border-left-color: #b00020; background: rgba(176, 0, 32, 0.10); font-weight: 600; }
 #output .lc-A { border-left-color: #8a4dff; background: rgba(138, 77, 255, 0.07); }
+
+.presets {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+.presets select {
+  flex: 1;
+  min-width: 0;
+  padding: 5px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+  font: inherit;
+  color: var(--text);
+}
+.presets button {
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  color: var(--text);
+}
+.presets button:hover:not(:disabled) { background: #f0f0f0; }
+.presets button:disabled { opacity: 0.5; cursor: not-allowed; }
+.presets #presetDelete { padding: 5px 8px; }
+
+.share-banner {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 16px;
+  background: #fff8d4;
+  border-bottom: 1px solid #e0c060;
+  font-size: 13px;
+}
+.share-banner[hidden] { display: none; }
+.share-banner-text { flex: 1; }
+.share-banner button {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  color: var(--text);
+}
+.share-banner button:hover { background: #f0f0f0; }

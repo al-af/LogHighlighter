@@ -17,7 +17,11 @@ A static, no-build browser tool for highlighting and filtering raw logs. Paste l
 │   ├── payload.js      # JSON + NSDictionary detection and pretty-print
 │   ├── logcat.js       # Android logcat line detection (level + tag)
 │   ├── highlight.js    # HTML-escaping + overlap-free multi-group highlighter
-│   └── output.js       # renders #output panel (filter/full modes)
+│   ├── output.js       # renders #output panel (filter/full modes)
+│   ├── storage.js      # versioned localStorage I/O
+│   ├── presets.js      # named-preset CRUD
+│   └── share.js        # URL hash encode/decode for shareable links
+├── tests/              # vitest unit tests
 └── .nojekyll           # disables Jekyll processing on GitHub Pages
 ```
 
@@ -32,6 +36,21 @@ python3 -m http.server 8000
 ```
 
 Then open <http://localhost:8000>.
+
+## Tests
+
+Unit tests cover storage, presets, and share-link encoding.
+
+```bash
+npm install
+npm test
+```
+
+## Sharing setups
+
+Click **Share** in the Keyword Groups panel to copy a URL with your current groups encoded in the fragment. Send it to a teammate — they open the link, get your setup preloaded, and paste their own logs in. The share URL never includes log content.
+
+If the recipient already has local groups configured, a banner asks whether to use the shared setup, keep theirs, or merge.
 
 ## Deploy to GitHub Pages
 

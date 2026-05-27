@@ -13,11 +13,26 @@
     <button data-mode="full">Full</button>
   </div>
 </header>
+<div id="shareBanner" class="share-banner" hidden>
+  <span class="share-banner-text">Loaded a shared setup (<span id="shareBannerCount">0</span> groups).</span>
+  <button id="shareBannerUse" type="button">Use shared</button>
+  <button id="shareBannerKeep" type="button">Keep mine</button>
+  <button id="shareBannerMerge" type="button">Merge</button>
+</div>
 <main>
   <div class="left">
     <section class="panel">
       <h2>Keyword Groups</h2>
       <div class="panel-body">
+        <div class="presets" id="presets">
+          <select id="presetSelect" aria-label="Preset">
+            <option value="">— Presets —</option>
+          </select>
+          <button id="presetLoad" type="button">Load</button>
+          <button id="presetSave" type="button" title="Save current as preset…">Save…</button>
+          <button id="presetDelete" type="button" title="Delete selected preset">×</button>
+          <button id="copyShareLink" type="button" title="Copy a link with current groups">Share</button>
+        </div>
         <div id="groups"></div>
         <div class="add-group">
           <input id="newGroup" placeholder="comma,separated,keywords" autocomplete="off">
