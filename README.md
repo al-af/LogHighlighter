@@ -1,6 +1,6 @@
 # Log Highlighter
 
-[![CI](https://github.com/AmitLevyAF/LogHighlighter/actions/workflows/ci.yml/badge.svg)](https://github.com/AmitLevyAF/LogHighlighter/actions/workflows/ci.yml)
+[![CI](https://github.com/al-af/LogHighlighter/actions/workflows/ci.yml/badge.svg)](https://github.com/al-af/LogHighlighter/actions/workflows/ci.yml)
 
 A static, no-build browser tool for highlighting and filtering raw logs. Paste log text, define keyword groups (each gets a distinct pastel color), and the output panel highlights matches. Embedded JSON and Apple `NSDictionary` payloads inside log lines are detected and pretty-printed inline. Android `logcat` lines (threadtime, time, and brief formats) are detected and colored by severity (V/D/I/W/E/F/A), so iOS and Android logs both render usefully.
 
