@@ -8,9 +8,12 @@
 <body>
 <header>
   <h1>Log Highlighter</h1>
-  <div class="mode-toggle" id="mode">
-    <button data-mode="filter" class="active">Filter</button>
-    <button data-mode="full">Full</button>
+  <div class="header-right">
+    <div class="mode-toggle" id="mode">
+      <button data-mode="filter" class="active">Filter</button>
+      <button data-mode="full">Full</button>
+    </div>
+    <button id="openGuide" class="header-btn" type="button" title="Show guide" aria-label="Show guide">? Guide</button>
   </div>
 </header>
 <div id="shareBanner" class="share-banner" hidden>
@@ -28,8 +31,7 @@
           <select id="presetSelect" aria-label="Preset">
             <option value="">— Presets —</option>
           </select>
-          <button id="presetLoad" type="button">Load</button>
-          <button id="presetSave" type="button" title="Save current as preset…">Save…</button>
+          <button id="presetCreate" type="button" title="Create a new preset from the current groups">+ New preset</button>
           <button id="presetDelete" type="button" title="Delete selected preset">×</button>
           <button id="copyShareLink" type="button" title="Copy a link with current groups">Share</button>
         </div>

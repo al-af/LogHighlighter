@@ -5,6 +5,8 @@ import { renderOutput } from './output.js';
 import { load, save } from './storage.js';
 import { listPresets, savePreset, loadPreset, deletePreset, onChange as onPresetsChange } from './presets.js';
 import { encodeGroups, consumeHash } from './share.js';
+import { openGuide } from './guide.js';
+import { openPresetEditor } from './presetEditor.js';
 
 const STATE_KEY = 'loghl:state';
 
@@ -25,6 +27,7 @@ function renderPresetSelect() {
     select.appendChild(opt);
   }
   if (current && listPresets().includes(current)) select.value = current;
+  syncPresetSelectionButtons();
 }
 
 function syncModeButtons() {
@@ -35,7 +38,11 @@ function syncModeButtons() {
 
 function syncShareButton() {
   document.getElementById('copyShareLink').disabled = state.groups.length === 0;
-  document.getElementById('presetSave').disabled = state.groups.length === 0;
+}
+
+function syncPresetSelectionButtons() {
+  const hasSelection = document.getElementById('presetSelect').value !== '';
+  document.getElementById('presetDelete').disabled = !hasSelection;
 }
 
 function dedupeGroups(groups) {
@@ -152,7 +159,8 @@ document.getElementById('mode').addEventListener('click', e => {
   notify();
 });
 
-document.getElementById('presetLoad').addEventListener('click', () => {
+document.getElementById('presetSelect').addEventListener('change', () => {
+  syncPresetSelectionButtons();
   const name = document.getElementById('presetSelect').value;
   if (!name) return;
   const groups = loadPreset(name);
@@ -161,16 +169,15 @@ document.getElementById('presetLoad').addEventListener('click', () => {
   notify();
 });
 
-document.getElementById('presetSave').addEventListener('click', () => {
-  if (state.groups.length === 0) return;
-  const name = window.prompt('Preset name:');
-  if (name == null) return;
-  if (listPresets().includes(name.trim()) && !window.confirm(`Overwrite preset "${name.trim()}"?`)) {
-    return;
-  }
-  const result = savePreset(name, state.groups);
-  if (!result.ok) window.alert(`Could not save: ${result.reason}`);
-  else document.getElementById('presetSelect').value = name.trim();
+document.getElementById('presetCreate').addEventListener('click', async () => {
+  const result = await openPresetEditor();
+  if (!result) return;
+  const { name, groups } = result;
+  if (listPresets().includes(name) && !window.confirm(`Overwrite existing preset "${name}"?`)) return;
+  const saved = savePreset(name, groups);
+  if (!saved.ok) { window.alert(`Could not create preset: ${saved.reason}`); return; }
+  document.getElementById('presetSelect').value = name;
+  syncPresetSelectionButtons();
 });
 
 document.getElementById('presetDelete').addEventListener('click', () => {
@@ -179,9 +186,12 @@ document.getElementById('presetDelete').addEventListener('click', () => {
   if (!window.confirm(`Delete preset "${name}"?`)) return;
   deletePreset(name);
   document.getElementById('presetSelect').value = '';
+  syncPresetSelectionButtons();
 });
 
 document.getElementById('copyShareLink').addEventListener('click', copyShareLink);
+
+document.getElementById('openGuide').addEventListener('click', openGuide);
 
 window.addEventListener('hashchange', () => {
   const r = consumeHash();
@@ -202,5 +212,6 @@ window.addEventListener('hashchange', () => {
 renderPresetSelect();
 syncModeButtons();
 syncShareButton();
+syncPresetSelectionButtons();
 renderGroups();
 renderOutput();
