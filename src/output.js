@@ -1,12 +1,13 @@
 import { state } from './state.js';
 import { detectPayload } from './payload.js';
 import { parseLogcat } from './logcat.js';
+import { parseOSLog } from './oslog.js';
 import { refreshAfterRender } from './lineNav.js';
 import { escapeHTML, highlight } from './highlight.js';
 
 function lineDiv(lineText, innerHTML, lineNumber) {
-  const lc = parseLogcat(lineText);
-  const cls = lc ? `lc lc-${lc.level}` : '';
+  const parsed = parseLogcat(lineText) || parseOSLog(lineText);
+  const cls = parsed ? `lc lc-${parsed.level}` : '';
   return `<div class="line ${cls}"><span class="ln">${lineNumber}</span><span class="content">${innerHTML}</span></div>`;
 }
 
@@ -42,7 +43,7 @@ export function renderOutput() {
   const out = document.getElementById('output');
   const raw = state.input;
   if (!raw) {
-    out.innerHTML = '<div class="placeholder">Add a keyword group and paste logs to begin. (best with logs under 500KB)</div>';
+    out.innerHTML = '<div class="placeholder">Paste raw logs in the Input panel, then pick a preset above (or open <kbd>? Guide</kbd>) to start highlighting.<br><small>Best with logs under 500 KB.</small></div>';
     refreshAfterRender();
     return;
   }
@@ -67,7 +68,7 @@ export function renderOutput() {
     }
   }
   if (!emittedAny) {
-    out.innerHTML = '<div class="placeholder">No matching lines.</div>';
+    out.innerHTML = '<div class="placeholder">No matching lines.<br><small>Switch to Full mode to see everything, or adjust your keyword groups.</small></div>';
     refreshAfterRender();
     return;
   }
