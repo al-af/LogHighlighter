@@ -1,12 +1,13 @@
 import { state } from './state.js';
 import { detectPayload } from './payload.js';
 import { parseLogcat } from './logcat.js';
+import { refreshAfterRender } from './lineNav.js';
 import { escapeHTML, highlight } from './highlight.js';
 
-function lineDiv(line, innerHTML) {
-  const lc = parseLogcat(line);
-  const cls = lc ? ` class="lc lc-${lc.level}"` : '';
-  return `<div${cls}>${innerHTML}</div>`;
+function lineDiv(lineText, innerHTML, lineNumber) {
+  const lc = parseLogcat(lineText);
+  const cls = lc ? `lc lc-${lc.level}` : '';
+  return `<div class="line ${cls}"><span class="ln">${lineNumber}</span><span class="content">${innerHTML}</span></div>`;
 }
 
 function lineMatches(line) {
@@ -42,29 +43,34 @@ export function renderOutput() {
   const raw = state.input;
   if (!raw) {
     out.innerHTML = '<div class="placeholder">Add a keyword group and paste logs to begin. (best with logs under 500KB)</div>';
+    refreshAfterRender();
     return;
   }
   const lines = raw.split('\n');
   const html = [];
   let dropped = 0;
   let emittedAny = false;
-  for (const line of lines) {
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const lineNumber = i + 1;
     const matched = lineMatches(line);
     if (state.mode === 'filter') {
       if (!matched) { dropped++; continue; }
       if (dropped > 0 && emittedAny) html.push('<div class="sep">···</div>');
       dropped = 0;
-      html.push(lineDiv(line, renderLine(line)));
+      html.push(lineDiv(line, renderLine(line), lineNumber));
       emittedAny = true;
     } else {
-      if (matched) html.push(lineDiv(line, renderLine(line)));
-      else html.push(lineDiv(line, escapeHTML(line)));
+      if (matched) html.push(lineDiv(line, renderLine(line), lineNumber));
+      else html.push(lineDiv(line, escapeHTML(line), lineNumber));
       emittedAny = true;
     }
   }
   if (!emittedAny) {
     out.innerHTML = '<div class="placeholder">No matching lines.</div>';
+    refreshAfterRender();
     return;
   }
   out.innerHTML = html.join('');
+  refreshAfterRender();
 }

@@ -31,6 +31,7 @@ const HTML = `
         <li><kbd>+ New preset</kbd> — opens an empty editor where you give the preset a name and define its keyword groups (one group per line, comma-separated keywords).</li>
         <li>Picking a preset from the dropdown <strong>applies it immediately</strong>, replacing your current groups.</li>
         <li><kbd>×</kbd> — delete the selected preset (with confirmation).</li>
+        <li>Four starter presets ship by default: iOS SDK, Android SDK, React Native bridge, OkHttp. Delete the ones you don't use — they won't come back on reload.</li>
       </ul>
     </section>
     <section>
@@ -67,6 +68,8 @@ const HTML = `
       <ul>
         <li>Keep input under ~500 KB for smooth rendering.</li>
         <li>State auto-saves to <code>localStorage</code> — refresh-safe.</li>
+        <li>Press <kbd>n</kbd> to jump to the next match in the output, <kbd>Shift</kbd>+<kbd>N</kbd> for the previous. The match count is shown next to the Output heading.</li>
+        <li>Line numbers reflect the original log line, not the filtered position — handy for sharing references like "see line 4823".</li>
         <li>Press <kbd>Esc</kbd> to close this guide.</li>
       </ul>
     </section>
