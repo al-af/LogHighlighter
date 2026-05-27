@@ -7,6 +7,8 @@ import { listPresets, savePreset, loadPreset, deletePreset, onChange as onPreset
 import { encodeGroups, consumeHash } from './share.js';
 import { openGuide } from './guide.js';
 import { openPresetEditor } from './presetEditor.js';
+import { seedStarterPresets } from './starterPresets.js';
+import { attachKeyboard } from './lineNav.js';
 
 const STATE_KEY = 'loghl:state';
 
@@ -209,9 +211,11 @@ window.addEventListener('hashchange', () => {
 
 // ── initial render ──────────────────────────────────────────────────────────
 
+seedStarterPresets();
 renderPresetSelect();
 syncModeButtons();
 syncShareButton();
 syncPresetSelectionButtons();
 renderGroups();
 renderOutput();
+attachKeyboard();
