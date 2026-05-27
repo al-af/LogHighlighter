@@ -1,0 +1,126 @@
+name: PR version bump
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: pr-bump-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  bump:
+    name: Lint, test, bump
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Determine bump kind from PR labels
+        id: kind
+        run: |
+          LABELS='${{ toJson(github.event.pull_request.labels.*.name) }}'
+          echo "labels: $LABELS"
+          if echo "$LABELS" | grep -q '"major"'; then
+            echo "kind=major" >> "$GITHUB_OUTPUT"
+          elif echo "$LABELS" | grep -q '"minor"'; then
+            echo "kind=minor" >> "$GITHUB_OUTPUT"
+          else
+            echo "kind=patch" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Read PR and main versions
+        id: versions
+        run: |
+          PR_VERSION=$(node -p "require('./package.json').version")
+          git fetch origin main --depth=1
+          if git cat-file -e origin/main:package.json 2>/dev/null; then
+            MAIN_VERSION=$(git show origin/main:package.json | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")
+            echo "main_has_pkg=true" >> "$GITHUB_OUTPUT"
+          else
+            MAIN_VERSION=""
+            echo "main_has_pkg=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "pr=$PR_VERSION" >> "$GITHUB_OUTPUT"
+          echo "main=$MAIN_VERSION" >> "$GITHUB_OUTPUT"
+          echo "PR version:   $PR_VERSION"
+          echo "main version: ${MAIN_VERSION:-<none>}"
+
+      - name: Decide whether to skip the bump
+        id: skip
+        run: |
+          MAIN_HAS_PKG="${{ steps.versions.outputs.main_has_pkg }}"
+          PR="${{ steps.versions.outputs.pr }}"
+          MAIN="${{ steps.versions.outputs.main }}"
+          if [ "$MAIN_HAS_PKG" != "true" ]; then
+            echo "main has no package.json — first-release bootstrap. Skipping bump; PR's version will be released as-is."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          elif [ "$PR" != "$MAIN" ]; then
+            echo "PR version differs from main — assuming manual bump. Skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Compute next version
+        if: steps.skip.outputs.skip == 'false'
+        id: next
+        run: |
+          KIND="${{ steps.kind.outputs.kind }}"
+          MAIN="${{ steps.versions.outputs.main }}"
+          NEXT=$(node -e "
+            const [maj, min, pat] = '$MAIN'.split('.').map(Number);
+            const kind = '$KIND';
+            if (kind === 'major') console.log((maj+1) + '.0.0');
+            else if (kind === 'minor') console.log(maj + '.' + (min+1) + '.0');
+            else console.log(maj + '.' + min + '.' + (pat+1));
+          ")
+          echo "version=$NEXT" >> "$GITHUB_OUTPUT"
+          echo "Next version: $NEXT"
+
+      - name: Update package.json
+        if: steps.skip.outputs.skip == 'false'
+        run: |
+          NEXT="${{ steps.next.outputs.version }}"
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            pkg.version = '$NEXT';
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+
+      - name: Commit and push bump
+        if: steps.skip.outputs.skip == 'false'
+        run: |
+          NEXT="${{ steps.next.outputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json
+          git commit -m "chore: bump version to $NEXT [skip ci]"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}

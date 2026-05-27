@@ -1,0 +1,17 @@
+{
+  "name": "loghighlighter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "eslint": "^9.39.4",
+    "globals": "^15.15.0",
+    "jsdom": "^25.0.0",
+    "vitest": "^2.1.0"
+  }
+}

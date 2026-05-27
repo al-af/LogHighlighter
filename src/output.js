@@ -1,6 +1,13 @@
 import { state } from './state.js';
 import { detectPayload } from './payload.js';
+import { parseLogcat } from './logcat.js';
 import { escapeHTML, highlight } from './highlight.js';
+
+function lineDiv(line, innerHTML) {
+  const lc = parseLogcat(line);
+  const cls = lc ? ` class="lc lc-${lc.level}"` : '';
+  return `<div${cls}>${innerHTML}</div>`;
+}
 
 function lineMatches(line) {
   if (!state.groups.length) return false;
@@ -47,11 +54,11 @@ export function renderOutput() {
       if (!matched) { dropped++; continue; }
       if (dropped > 0 && emittedAny) html.push('<div class="sep">···</div>');
       dropped = 0;
-      html.push('<div>' + renderLine(line) + '</div>');
+      html.push(lineDiv(line, renderLine(line)));
       emittedAny = true;
     } else {
-      if (matched) html.push('<div>' + renderLine(line) + '</div>');
-      else html.push('<div>' + escapeHTML(line) + '</div>');
+      if (matched) html.push(lineDiv(line, renderLine(line)));
+      else html.push(lineDiv(line, escapeHTML(line)));
       emittedAny = true;
     }
   }
