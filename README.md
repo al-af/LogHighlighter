@@ -1,3 +1,6 @@
+<!-- markdownlint-disable-next-line MD041 -->
+![LogHighlighter — Highlight, filter, and share raw logs in your browser. No build, no backend.](assets/banner.png)
+
 # Log Highlighter
 
 [![CI](https://github.com/al-af/LogHighlighter/actions/workflows/ci.yml/badge.svg)](https://github.com/al-af/LogHighlighter/actions/workflows/ci.yml)
