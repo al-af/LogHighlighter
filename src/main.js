@@ -7,6 +7,9 @@ import { listPresets, savePreset, loadPreset, deletePreset, onChange as onPreset
 import { encodeGroups, consumeHash } from './share.js';
 import { openGuide } from './guide.js';
 import { openPresetEditor } from './presetEditor.js';
+import { seedStarterPresets } from './starterPresets.js';
+import { attachKeyboard } from './lineNav.js';
+import { applyInitialTheme, toggleTheme, syncToggleButton } from './theme.js';
 
 const STATE_KEY = 'loghl:state';
 
@@ -193,6 +196,9 @@ document.getElementById('copyShareLink').addEventListener('click', copyShareLink
 
 document.getElementById('openGuide').addEventListener('click', openGuide);
 
+const themeBtn = document.getElementById('toggleTheme');
+themeBtn.addEventListener('click', () => syncToggleButton(themeBtn, toggleTheme()));
+
 window.addEventListener('hashchange', () => {
   const r = consumeHash();
   if (r.ok) {
@@ -209,9 +215,12 @@ window.addEventListener('hashchange', () => {
 
 // ── initial render ──────────────────────────────────────────────────────────
 
+syncToggleButton(themeBtn, applyInitialTheme());
+seedStarterPresets();
 renderPresetSelect();
 syncModeButtons();
 syncShareButton();
 syncPresetSelectionButtons();
 renderGroups();
 renderOutput();
+attachKeyboard();

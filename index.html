@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>Log Highlighter</title>
+<link rel="icon" type="image/png" href="assets/icon.png">
+<link rel="apple-touch-icon" href="assets/icon.png">
 <link rel="stylesheet" href="styles/app.css">
 </head>
 <body>
@@ -13,6 +15,7 @@
       <button data-mode="filter" class="active">Filter</button>
       <button data-mode="full">Full</button>
     </div>
+    <button id="toggleTheme" class="header-btn" type="button" title="Toggle dark mode" aria-label="Toggle dark mode">☾</button>
     <button id="openGuide" class="header-btn" type="button" title="Show guide" aria-label="Show guide">? Guide</button>
   </div>
 </header>
@@ -48,7 +51,7 @@
     </section>
   </div>
   <section class="panel">
-    <h2>Output</h2>
+    <h2>Output<span id="matchCount" class="match-count" hidden></span></h2>
     <div class="panel-body" id="output">
       <div class="placeholder">Add a keyword group and paste logs to begin.</div>
     </div>

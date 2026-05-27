@@ -1,8 +1,35 @@
+<!-- markdownlint-disable-next-line MD041 -->
+![LogHighlighter — Highlight, filter, and share raw logs in your browser. No build, no backend.](assets/banner.png)
+
 # Log Highlighter
 
 [![CI](https://github.com/al-af/LogHighlighter/actions/workflows/ci.yml/badge.svg)](https://github.com/al-af/LogHighlighter/actions/workflows/ci.yml)
 
 A static, no-build browser tool for highlighting and filtering raw logs. Paste log text, define keyword groups (each gets a distinct pastel color), and the output panel highlights matches. Embedded JSON and Apple `NSDictionary` payloads inside log lines are detected and pretty-printed inline. Android `logcat` lines (threadtime, time, and brief formats) are detected and colored by severity (V/D/I/W/E/F/A), so iOS and Android logs both render usefully.
+
+## Quickstart
+
+**Try it instantly** on GitHub Pages: <https://al-af.github.io/LogHighlighter/>.
+
+**Use it in 30 seconds:**
+
+1. Pick a starter preset from the **Presets** dropdown — iOS SDK, Android SDK, React Native bridge, or OkHttp. The groups load immediately.
+2. Paste any log into the **Input** panel.
+3. Matching lines stay; non-matching lines collapse into `···` separators. Use the **Full** toggle to see everything.
+4. Press <kbd>n</kbd> / <kbd>Shift</kbd>+<kbd>N</kbd> to jump between matches. The counter next to **Output** shows your position.
+5. Click <kbd>? Guide</kbd> in the header for the full feature tour.
+
+**Make it yours:**
+
+- Define your own keyword groups in the **Keyword Groups** panel (comma-separated, one chip per keyword).
+- Click <kbd>+ New preset</kbd> to save a setup with a name. Pick it from the dropdown anytime to reload.
+- Click <kbd>Share</kbd> to copy a URL with your groups encoded — send it to a teammate. **Log content is never included.**
+
+**For teams:**
+
+- Share the GitHub Pages URL with your team — no install, no backend.
+- Use <kbd>Share</kbd> to standardize keyword setups across the team.
+- Click the moon / sun icon to switch between light and dark themes.
 
 ## Structure
 
