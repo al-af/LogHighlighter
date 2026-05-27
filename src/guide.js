@@ -61,7 +61,8 @@ const HTML = `
         <li><span class="lvl lvl-F">F</span> Fatal — dark red, bold</li>
         <li><span class="lvl lvl-A">A</span> Assert — purple tint</li>
       </ul>
-      <p>iOS-style log lines without a logcat level are unaffected.</p>
+      <p>The same severity scheme applies to Apple <code>os_log</code> output: <code>Debug</code> maps to Verbose, <code>Info</code> stays Info, <code>Default</code>/<code>Notice</code> become Debug-blue, <code>Error</code> stays Error, <code>Fault</code> stays Fatal.</p>
+      <p>Plain <code>NSLog</code>-style lines without an explicit level marker pass through uncolored.</p>
     </section>
     <section>
       <h3>Tips</h3>
@@ -70,6 +71,8 @@ const HTML = `
         <li>State auto-saves to <code>localStorage</code> — refresh-safe.</li>
         <li>Press <kbd>n</kbd> to jump to the next match in the output, <kbd>Shift</kbd>+<kbd>N</kbd> for the previous. The match count is shown next to the Output heading.</li>
         <li>Line numbers reflect the original log line, not the filtered position — handy for sharing references like "see line 4823".</li>
+        <li>Click the moon / sun icon in the header to switch between light and dark themes. Your choice is remembered.</li>
+        <li>iOS <code>os_log</code> / <code>log show</code> output is auto-colored by severity (Debug, Info, Default/Notice, Error, Fault) using the same scheme as Android logcat.</li>
         <li>Press <kbd>Esc</kbd> to close this guide.</li>
       </ul>
     </section>
